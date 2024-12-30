@@ -1,0 +1,20 @@
+{
+    "name": "SystemVerilog Development Container",
+    "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",  // C/C++ support
+                "mshr-h.veriloghdl",
+                "zxh404.vscode-proto3"
+            ]
+        }
+    },
+    "postCreateCommand": "apt-get update && apt-get install -y verilator",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
