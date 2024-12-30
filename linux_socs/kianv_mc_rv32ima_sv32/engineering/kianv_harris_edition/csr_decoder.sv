@@ -79,10 +79,10 @@
 `include "riscv_defines.svh"
 
 module csr_decoder (
-    input  logic [2:0]                 funct3,
-    input  logic [4:0]                 Rs1Uimm,
-    input  logic [4:0]                 Rd,
-    input  logic                       valid,
+    input wire  [2:0]                  funct3,
+    input wire  [4:0]                  Rs1Uimm,
+    input wire  [4:0]                  Rd,
+    input wire                         valid,
     output logic                       CSRwe,
     output logic                       CSRre,
     output logic [`CSR_OP_WIDTH-1:0]   CSRop

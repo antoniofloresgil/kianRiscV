@@ -30,9 +30,9 @@
 `include "riscv_defines.svh"
 
 module load_alignment (
-    input  logic [1:0]               addr,     // Address offset (2 LSBs of memory address)
-    input  logic [`LOAD_OP_WIDTH-1:0] LOADop,  // Load operation type
-    input  logic [31:0]              data,     // Data from memory
+    input wire [1:0]               addr,     // Address offset (2 LSBs of memory address)
+    input wire [`LOAD_OP_WIDTH-1:0] LOADop,  // Load operation type
+    input wire [31:0]              data,     // Data from memory
     output logic [31:0]              result    // Aligned load result
 );
 

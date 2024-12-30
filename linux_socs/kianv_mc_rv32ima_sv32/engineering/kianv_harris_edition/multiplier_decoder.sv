@@ -30,9 +30,9 @@
 `include "riscv_defines.svh"
 
 module multiplier_decoder (
-    input  logic [2:0]                  funct3,         // funct3 field from instruction
+    input  wire [2:0]                   funct3,         // funct3 field from instruction
     output logic [`MUL_OP_WIDTH-1:0]    MULop,          // Multiplier operation code
-    input  logic                        mul_ext_valid,  // Multiplier external valid signal
+    input  wire                         mul_ext_valid,  // Multiplier external valid signal
     output logic                        mul_valid       // Multiplier valid signal
 );
 

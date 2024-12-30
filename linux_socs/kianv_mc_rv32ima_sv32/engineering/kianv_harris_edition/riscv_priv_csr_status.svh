@@ -55,95 +55,189 @@
 //    - Constants for privilege levels, MSTATUS fields, and interrupt handling.
 //    - Macros for setting and getting specific bits in registers.
 
-`ifndef RISCV_PRIV_CSR_STATUS_SVH
-`define RISCV_PRIV_CSR_STATUS_SVH
+`ifndef RISCV_PRIV_CSR_STATUS_VH
+`define RISCV_PRIV_CSR_STATUS_VH
 
-// RISC-V Privilege Levels
-`define PRIVILEGE_MODE_USER       2'b00
-`define PRIVILEGE_MODE_SUPERVISOR 2'b01
-`define PRIVILEGE_MODE_RESERVED   2'b10
-`define PRIVILEGE_MODE_MACHINE    2'b11
+// RISC-V privilege levels
+`define PRIVILEGE_MODE_USER 0  // User mode privilege level
+`define PRIVILEGE_MODE_SUPERVISOR 1  // Supervisor mode privilege level
+`define PRIVILEGE_MODE_RESERVED 2  // Reserved privilege level
+`define PRIVILEGE_MODE_MACHINE 3  // Machine mode privilege level
 
-`define IS_USER(privilege)       (privilege == `PRIVILEGE_MODE_USER)
+// Check if the given privilege level matches a specific mode
+`define IS_USER(privilege) (privilege == `PRIVILEGE_MODE_USER)
 `define IS_SUPERVISOR(privilege) (privilege == `PRIVILEGE_MODE_SUPERVISOR)
-`define IS_MACHINE(privilege)    (privilege == `PRIVILEGE_MODE_MACHINE)
+`define IS_MACHINE(privilege) (privilege == `PRIVILEGE_MODE_MACHINE)
 
-// Interrupt Bits and Masks
-`define MIP_MTIP_BIT   7
-`define MIE_MTIP_BIT   7
-`define MIP_MSIP_BIT   3
-`define MIE_MSIP_BIT   3
+// Machine Interrupt Enable (MIE) bits
+`define MIE_MEIE_BIT       11  // Machine External Interrupt Enable bit
+`define MIE_MSIE_BIT       3   // Machine Software Interrupt Enable bit
+`define MIE_MTIE_BIT       7   // Machine Timer Interrupt Enable bit
 
-`define MIP_MTIP_MASK  (1 << `MIP_MTIP_BIT)
-`define MIE_MTIP_MASK  (1 << `MIE_MTIP_BIT)
-`define MIP_MSIP_MASK  (1 << `MIP_MSIP_BIT)
-`define MIE_MSIP_MASK  (1 << `MIE_MSIP_BIT)
+// Supervisor Interrupt Enable (XIE) bits
+`define XIE_SEIE_BIT       9   // Supervisor External Interrupt Enable bit
+`define XIE_SSIE_BIT       1   // Supervisor Software Interrupt Enable bit
+`define XIE_STIE_BIT       5   // Supervisor Timer Interrupt Enable bit
 
-// MSTATUS Register Fields
-`define MSTATUS_MPP_BIT    11
-`define MSTATUS_MPP_WIDTH  2
-`define MSTATUS_MPIE_BIT   7
-`define MSTATUS_MIE_BIT    3
-`define MSTATUS_MPRV_BIT   17
+// Machine Interrupt Pending (MIP) bits
+`define MIP_MEIP_BIT       11  // Machine External Interrupt Pending bit
+`define MIP_MSIP_BIT       3   // Machine Software Interrupt Pending bit
+`define MIP_MTIP_BIT       7   // Machine Timer Interrupt Pending bit
 
-`define MSTATUS_MIE_MASK   (1 << `MSTATUS_MIE_BIT)
-`define MSTATUS_MPIE_MASK  (1 << `MSTATUS_MPIE_BIT)
-`define MSTATUS_MPP_MASK   (((1 << `MSTATUS_MPP_WIDTH) - 1) << `MSTATUS_MPP_BIT)
-`define MSTATUS_MPRV_MASK  (1 << `MSTATUS_MPRV_BIT)
+// Supervisor Interrupt Pending (XIP) bits
+`define XIP_SEIP_BIT       9   // Supervisor External Interrupt Pending bit
+`define XIP_SSIP_BIT       1   // Supervisor Software Interrupt Pending bit
+`define XIP_STIP_BIT       5   // Supervisor Timer Interrupt Pending bit
 
-// Macros for MSTATUS manipulation
-`define GET_MIE_MTIP(mie)  ((mie >> `MIE_MTIP_BIT) & 1)
-`define GET_MIE_MSIP(mie)  ((mie >> `MIE_MSIP_BIT) & 1)
+// Interrupt Enable Masks
+`define MIE_MEIE_MASK      (1 << `MIE_MEIE_BIT)  // Enable Machine External Interrupt
+`define MIE_MSIE_MASK      (1 << `MIE_MSIE_BIT)  // Enable Machine Software Interrupt
+`define MIE_MTIE_MASK      (1 << `MIE_MTIE_BIT)  // Enable Machine Timer Interrupt
 
-`define GET_MIP_MTIP(mip)  (((mip) >> `MIP_MTIP_BIT) & 1'b1)
-`define GET_MIP_MSIP(mip)  (((mip) >> `MIP_MSIP_BIT) & 1'b1)
+`define XIE_SEIE_MASK      (1 << `XIE_SEIE_BIT)  // Enable Supervisor External Interrupt
+`define XIE_SSIE_MASK      (1 << `XIE_SSIE_BIT)  // Enable Supervisor Software Interrupt
+`define XIE_STIE_MASK      (1 << `XIE_STIE_BIT)  // Enable Supervisor Timer Interrupt
 
-`define SET_MIP_MSIP(mip, value) \
-    ((mip & ~`MIP_MSIP_MASK) | ((value & 1'b1) << `MIP_MSIP_BIT))
+// Interrupt Pending Masks
+`define MIP_MEIP_MASK      (1 << `MIP_MEIP_BIT)  // Machine External Interrupt Pending
+`define MIP_MSIP_MASK      (1 << `MIP_MSIP_BIT)  // Machine Software Interrupt Pending
+`define MIP_MTIP_MASK      (1 << `MIP_MTIP_BIT)  // Machine Timer Interrupt Pending
 
-`define SET_MIP_MTIP(mip, value) \
-    ((mip & ~`MIP_MTIP_MASK) | ((value & 1'b1) << `MIP_MTIP_BIT))
+`define XIP_SEIP_MASK      (1 << `XIP_SEIP_BIT)  // Supervisor External Interrupt Pending
+`define XIP_SSIP_MASK      (1 << `XIP_SSIP_BIT)  // Supervisor Software Interrupt Pending
+`define XIP_STIP_MASK      (1 << `XIP_STIP_BIT)  // Supervisor Timer Interrupt Pending
 
-// MSTATUS manipulation macros
-`define SET_MSTATUS_MPP(mstatus, new_privilege_mode) \
-    ((mstatus & ~`MSTATUS_MPP_MASK) | (((new_privilege_mode) & 2'b11) << `MSTATUS_MPP_BIT))
+// Status Register Bits
+`define XSTATUS_SIE_BIT 1  // Supervisor Interrupt Enable bit
+`define XSTATUS_SIE_MASK (1 << `XSTATUS_SIE_BIT)
 
-`define GET_MSTATUS_MPP(mstatus) \
-    ((mstatus >> `MSTATUS_MPP_BIT) & 2'b11)
+`define MSTATUS_MPP_BIT 11  // Machine Previous Privilege Mode bit position
+`define MSTATUS_MPP_WIDTH 2  // Width of MPP field
+`define MSTATUS_MPIE_BIT 7   // Machine Previous Interrupt Enable bit
+`define MSTATUS_MIE_BIT 3    // Machine Interrupt Enable bit
+`define MSTATUS_MPRV_BIT 17  // Memory Privilege bit
 
-`define SET_MSTATUS_MPIE(mstatus, mpi_value) \
-    ((mstatus & ~`MSTATUS_MPIE_MASK) | (((mpi_value) & 1'b1) << `MSTATUS_MPIE_BIT))
+// Supervisor Status Bits
+`define XSTATUS_SPIE_BIT 5  // Supervisor Previous Interrupt Enable bit
+`define XSTATUS_SPIE_MASK (1 << `XSTATUS_SPIE_BIT)
 
-`define GET_MSTATUS_MPIE(mstatus) \
-    ((mstatus >> `MSTATUS_MPIE_BIT) & 1'b1)
+`define XSTATUS_SPP_BIT 8  // Supervisor Previous Privilege Mode bit
+`define XSTATUS_SPP_MASK (1 << `XSTATUS_SPP_BIT)
 
-`define SET_MSTATUS_MIE(mstatus, value) \
-    ((mstatus & ~`MSTATUS_MIE_MASK) | (((value) & 1'b1) << `MSTATUS_MIE_BIT))
+`define XSTATUS_MXR 19  // Make eXecutable Readable bit
+`define XSTATUS_SUM_POS 18  // Supervisor User Memory bit position
 
-`define GET_MSTATUS_MIE(mstatus) \
-    ((mstatus >> `MSTATUS_MIE_BIT) & 1'b1)
+// Masks for MSTATUS fields
+`define MSTATUS_MIE_MASK (1 << `MSTATUS_MIE_BIT)
+`define MSTATUS_MPIE_MASK (1 << `MSTATUS_MPIE_BIT)
+`define MSTATUS_MPP_MASK (((1 << `MSTATUS_MPP_WIDTH) - 1) << `MSTATUS_MPP_BIT)
+`define MSTATUS_MPRV_MASK (1 << `MSTATUS_MPRV_BIT)
 
-`define SET_MSTATUS_MPRV(mstatus, mprv_value) \
-    ((mstatus & ~`MSTATUS_MPRV_MASK) | (((mprv_value) & 1'b1) << `MSTATUS_MPRV_BIT))
+// Supervisor Status Mask
+`define SSTATUS_SIE_BIT   (1 << 1)  // Supervisor Interrupt Enable
+`define SSTATUS_SPIE_BIT  (1 << 5)  // Supervisor Previous Interrupt Enable
+`define SSTATUS_UBE_BIT   (1 << 6)  // User-mode Big-Endian
+`define SSTATUS_SPP_BIT   (1 << 8)  // Supervisor Previous Privilege
+`define SSTATUS_VS_BIT    (3 << 9)  // Virtualization State
+`define SSTATUS_FS_BIT    (3 << 13) // Floating-point Status
+`define SSTATUS_XS_BIT    (3 << 15) // Extension Status
+`define SSTATUS_SUM_BIT   (1 << 18) // Supervisor User Memory Access
+`define SSTATUS_MXR_BIT   (1 << 19) // Make eXecutable Readable
+`define SSTATUS_SD_BIT    (1 << 31) // Dirty State
 
-`define GET_MSTATUS_MPRV(mstatus) \
-    ((mstatus >> `MSTATUS_MPRV_BIT) & 1'b1)
+`define SSTATUS_MASK (`SSTATUS_SIE_BIT | `SSTATUS_SPIE_BIT | `SSTATUS_UBE_BIT | \
+                      `SSTATUS_SPP_BIT | `SSTATUS_VS_BIT | `SSTATUS_FS_BIT | `SSTATUS_XS_BIT | `SSTATUS_SUM_BIT | \
+                      `SSTATUS_MXR_BIT | `SSTATUS_SD_BIT)
 
-// Instruction Matching Macros
-`define IS_EBREAK(opcode, funct3, funct7, rs1, rs2, rd) \
-    ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h00100073)
+// Machine Exception Delegation Register (MEDELEG) bits
+`define MEDELEG_INST_ADDR_MISALIGNED  'h0001  // Instruction Address Misaligned
+`define MEDELEG_INST_ACCESS_FAULT     'h0002  // Instruction Access Fault
+`define MEDELEG_ILLEGAL_INST          'h0004  // Illegal Instruction
+`define MEDELEG_BREAKPOINT            'h0008  // Breakpoint
+`define MEDELEG_LOAD_ADDR_MISALIGNED  'h0010  // Load Address Misaligned
+`define MEDELEG_LOAD_ACCESS_FAULT     'h0020  // Load Access Fault
+`define MEDELEG_STORE_ADDR_MISALIGNED 'h0040  // Store Address Misaligned
+`define MEDELEG_STORE_ACCESS_FAULT    'h0080  // Store Access Fault
+`define MEDELEG_ECALL_U               'h0100  // Environment Call from User Mode
+`define MEDELEG_ECALL_S               'h0200  // Environment Call from Supervisor Mode
+`define MEDELEG_INSTR_PAGE_FAULT      'h1000  // Instruction Page Fault
+`define MEDELEG_LOAD_PAGE_FAULT       'h2000  // Load Page Fault
+`define MEDELEG_STORE_PAGE_FAULT      'h8000  // Store Page Fault
 
-`define IS_ECALL(opcode, funct3, funct7, rs1, rs2, rd) \
-    ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h00000073)
+// MEDELEG Mask
+`define MEDELEG_MASK (`MEDELEG_INST_ADDR_MISALIGNED | `MEDELEG_INST_ACCESS_FAULT | \
+                      `MEDELEG_ILLEGAL_INST | `MEDELEG_BREAKPOINT | \
+                      `MEDELEG_LOAD_ADDR_MISALIGNED | `MEDELEG_LOAD_ACCESS_FAULT | \
+                      `MEDELEG_STORE_ADDR_MISALIGNED | `MEDELEG_STORE_ACCESS_FAULT | \
+                      `MEDELEG_ECALL_U | `MEDELEG_ECALL_S | \
+                      `MEDELEG_INSTR_PAGE_FAULT | `MEDELEG_LOAD_PAGE_FAULT | \
+                      `MEDELEG_STORE_PAGE_FAULT)
 
-`define IS_MRET(opcode, funct3, funct7, rs1, rs2, rd) \
-    ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h30200073)
+// Machine Interrupt Delegation Register (MIDELEG) bits
+`define MIDELEG_SUPERVISOR_SOFT_INTR   'h002  // Supervisor Software Interrupt
+`define MIDELEG_SUPERVISOR_TIMER_INTR  'h020  // Supervisor Timer Interrupt
+`define MIDELEG_SUPERVISOR_EXT_INTR    'h200  // Supervisor External Interrupt
 
-`define IS_WFI(opcode, funct3, funct7, rs1, rs2, rd) \
-    ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h10500073)
+`define MIDELEG_MASK (`MIDELEG_SUPERVISOR_SOFT_INTR | `MIDELEG_SUPERVISOR_TIMER_INTR | \
+                      `MIDELEG_SUPERVISOR_EXT_INTR)
 
-`define IRQ_M_TIMER 7
+// Interrupt Masks
+`define SIP_MASK (`XIP_SSIP_MASK | `XIP_SEIP_MASK | `XIP_STIP_MASK)  // Supervisor Interrupt Pending Mask
+`define SIE_MASK (`XIE_SSIE_MASK | `XIE_SEIE_MASK | `XIE_STIE_MASK)  // Supervisor Interrupt Enable Mask
 
-`include "mcause.svh"
+// Macros to manipulate interrupt and status fields
+`define GET_MIE_MSIE(value) ((value >> `MIE_MSIE_BIT) & 1'b1)  // Get Machine Software Interrupt Enable
+`define GET_MIE_MTIE(value) ((value >> `MIE_MTIE_BIT) & 1'b1)  // Get Machine Timer Interrupt Enable
+`define GET_MIP_MEIP(value) (((value) >> `MIP_MEIP_BIT) & 1'b1)  // Get Machine External Interrupt Pending
+`define GET_MIP_MSIP(value) (((value) >> `MIP_MSIP_BIT) & 1'b1)  // Get Machine Software Interrupt Pending
+`define GET_MIP_MTIP(value) (((value) >> `MIP_MTIP_BIT) & 1'b1)  // Get Machine Timer Interrupt Pending
+`define GET_XIP_SEIP(value) (((value) >> `XIP_SEIP_BIT) & 1'b1)  // Get Supervisor External Interrupt Pending
+`define GET_XIP_SSIP(value) (((value) >> `XIP_SSIP_BIT) & 1'b1)  // Get Supervisor Software Interrupt Pending
+`define GET_XIP_STIP(value) (((value) >> `XIP_STIP_BIT) & 1'b1)  // Get Supervisor Timer Interrupt Pending
 
-`endif // RISCV_PRIV_CSR_STATUS_SVH
+`define SET_MIP_MEIP(value)  ((value) << `MIP_MEIP_BIT)  // Set Machine External Interrupt Pending
+`define SET_MIP_MSIP(value)  ((value) << `MIP_MSIP_BIT)  // Set Machine Software Interrupt Pending
+`define SET_MIP_MTIP(value)  ((value) << `MIP_MTIP_BIT)  // Set Machine Timer Interrupt Pending
+`define SET_XIP_SEIP(value)  ((value) << `XIP_SEIP_BIT)  // Set Supervisor External Interrupt Pending
+`define SET_XIP_SSIP(value)  ((value) << `XIP_SSIP_BIT)  // Set Supervisor Software Interrupt Pending
+`define SET_XIP_STIP(value)  ((value) << `XIP_STIP_BIT)  // Set Supervisor Timer Interrupt Pending
+
+// Macros to manipulate MSTATUS fields
+`define GET_MSTATUS_MIE(value) (((value) >> `MSTATUS_MIE_BIT) & 1'b1)  // Get Machine Interrupt Enable
+`define GET_MSTATUS_MPIE(value) (((value) >> `MSTATUS_MPIE_BIT) & 1'b1)  // Get Machine Previous Interrupt Enable
+`define GET_MSTATUS_MPP(value) (((value) >> `MSTATUS_MPP_BIT) & 2'b11)  // Get Machine Previous Privilege Mode
+`define GET_MSTATUS_MPRV(value) ((value >> `MSTATUS_MPRV_BIT) & 1'b1)  // Get Memory Privilege bit
+`define GET_MSTATUS_MXR(value) (((value) >> `XSTATUS_MXR) & 1'b1)  // Get Make eXecutable Readable
+`define GET_XSTATUS_SIE(value) (((value) >> `XSTATUS_SIE_BIT) & 1'b1)  // Get Supervisor Interrupt Enable
+`define GET_XSTATUS_SPIE(value) (((value) >> `XSTATUS_SPIE_BIT) & 1'b1)  // Get Supervisor Previous Interrupt Enable
+`define GET_XSTATUS_SPP(value) (((value) >> `XSTATUS_SPP_BIT) & 1'b1)  // Get Supervisor Previous Privilege Mode
+`define GET_XSTATUS_SUM(value) (((value) >> `XSTATUS_SUM_POS) & 1'b1)  // Get Supervisor User Memory Access
+
+`define SET_MSTATUS_MIE(value) ((value) << `MSTATUS_MIE_BIT)  // Set Machine Interrupt Enable
+`define SET_MSTATUS_MPIE(value) ((value) << `MSTATUS_MPIE_BIT)  // Set Machine Previous Interrupt Enable
+`define SET_MSTATUS_MPP(new_privilege_mode) (((new_privilege_mode) & 2'b11) << `MSTATUS_MPP_BIT)  // Set Machine Previous Privilege Mode
+`define SET_MSTATUS_MPRV(mstatus, mprv_value) ((mstatus & ~`MSTATUS_MPRV_MASK) | (((mprv_value) & 1'b1) << `MSTATUS_MPRV_BIT))  // Set Memory Privilege
+`define SET_MSTATUS_MXR(mstatus, value) ((mstatus & ~`XSTATUS_MXR_MASK) | ((value << 19) & `XSTATUS_MXR_MASK))  // Set Make eXecutable Readable
+`define SET_XSTATUS_SIE(value)  ((value) << `XSTATUS_SIE_BIT)  // Set Supervisor Interrupt Enable
+`define SET_XSTATUS_SPIE(value) ((value) << `XSTATUS_SPIE_BIT)  // Set Supervisor Previous Interrupt Enable
+`define SET_XSTATUS_SPP(value)  ((value) << `XSTATUS_SPP_BIT)  // Set Supervisor Previous Privilege Mode
+
+// SSTC (Supervisor Single Timer Compare) Conditions
+`define GET_MENVCFGH_STCE(menvcfgh) ((menvcfgh >> 31) & 1)  // Get Supervisor Timer Compare Enable
+`define GET_MCOUNTEREN_TM(mcounteren) ((mcounteren >> 1) & 1)  // Get Timer Match bit
+`define CHECK_SSTC_CONDITIONS(menvcfgh, mcounteren) \
+    (`GET_MENVCFGH_STCE(menvcfgh) && `GET_MCOUNTEREN_TM(mcounteren))
+`define CHECK_SSTC_TM_AND_CMP(timer_counter, stimecmph, stimecmp, menvcfgh, mcounteren) \
+    (timer_counter >= {stimecmph, stimecmp} && \
+    `CHECK_SSTC_CONDITIONS(menvcfgh, mcounteren))
+
+// Instruction Checks
+`define IS_EBREAK(opcode, funct3, funct7, rs1, rs2, rd) ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h00100073)  // Check for EBREAK instruction
+`define IS_ECALL(opcode, funct3, funct7, rs1, rs2, rd) ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h00000073)  // Check for ECALL instruction
+`define IS_MRET(opcode, funct3, funct7, rs1, rs2, rd) ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h30200073)  // Check for MRET instruction
+`define IS_SRET(opcode, funct3, funct7, rs1, rs2, rd) ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h10200073)  // Check for SRET instruction
+`define IS_WFI(opcode, funct3, funct7, rs1, rs2, rd) ({funct7, rs2, rs1, funct3, rd, opcode} == 32'h10500073)  // Check for WFI instruction
+
+`include "mcause.svh"  // Include cause register definitions
+
+`endif

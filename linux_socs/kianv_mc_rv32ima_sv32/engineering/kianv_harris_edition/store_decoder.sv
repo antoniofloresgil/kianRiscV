@@ -31,10 +31,10 @@
 `include "riscv_defines.svh"
 
 module store_decoder (
-    input  logic [2:0]                 funct3,               // funct3 field from instruction
-    input  logic                       amo_operation_store,  // AMO store operation flag
+    input wire  [2:0]                  funct3,               // funct3 field from instruction
+    input wire                         amo_operation_store,  // AMO store operation flag
     output logic [`STORE_OP_WIDTH-1:0] STOREop,              // Store operation output
-    input  logic [1:0]                 addr_align_bits,      // Address alignment bits
+    input wire  [1:0]                  addr_align_bits,      // Address alignment bits
     output logic                       is_store_unaligned    // Flag for unaligned stores
 );
 

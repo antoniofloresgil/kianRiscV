@@ -29,9 +29,9 @@
 `include "riscv_defines.svh"
 
 module store_alignment (
-    input  logic [1:0]                   addr,     // Address alignment bits
-    input  logic [`STORE_OP_WIDTH-1:0]   STOREop,  // Store operation code
-    input  logic [31:0]                  data,     // Data to be stored
+    input wire [1:0]                   addr,     // Address alignment bits
+    input wire [`STORE_OP_WIDTH-1:0]   STOREop,  // Store operation code
+    input wire [31:0]                  data,     // Data to be stored
     output logic [31:0]                  result,   // Aligned data output
     output logic [3:0]                   wmask     // Write mask
 );

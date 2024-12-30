@@ -36,16 +36,16 @@
 `include "riscv_defines.svh"
 
 module control_unit (
-    input  logic                       clk,
-    input  logic                       resetn,
-    input  logic [6:0]                 op,
-    input  logic [2:0]                 funct3,
-    input  logic [6:0]                 funct7,
-    input  logic                       immb10,
-    input  logic                       Zero,
-    input  logic [4:0]                 Rs1,
-    input  logic [4:0]                 Rs2,
-    input  logic [4:0]                 Rd,
+    input  wire                       clk,
+    input  wire                       resetn,
+    input  wire [6:0]                 op,
+    input  wire [2:0]                 funct3,
+    input  wire [6:0]                 funct7,
+    input  wire                       immb10,
+    input  wire                       Zero,
+    input  wire [4:0]                 Rs1,
+    input  wire [4:0]                 Rs2,
+    input  wire [4:0]                 Rd,
     output logic [`RESULT_WIDTH-1:0]   ResultSrc,
     output logic [`ALU_CTRL_WIDTH-1:0] ALUControl,
     output logic [`SRCA_WIDTH-1:0]     ALUSrcA,
@@ -62,8 +62,8 @@ module control_unit (
     output logic                       PCWrite,
     output logic                       AdrSrc,
     output logic                       MemWrite,
-    input  logic                       access_fault,
-    input  logic                       page_fault,
+    input  wire                       access_fault,
+    input  wire                       page_fault,
     output logic                       store_instr,
     output logic                       incr_inst_retired,
     output logic                       ALUOutWrite,
@@ -72,7 +72,7 @@ module control_unit (
     output logic                       amo_set_reserved_state_load,
     output logic                       amo_buffered_data,
     output logic                       amo_buffered_address,
-    input  logic                       amo_reserved_state_load,
+    input  wire                       amo_reserved_state_load,
     output logic                       select_ALUResult,
     output logic                       select_amo_temp,
 
@@ -83,31 +83,31 @@ module control_unit (
     output logic                       mret,
     output logic                       sret,
     output logic                       wfi_event,
-    input  logic [1:0]                 privilege_mode,
-    input  logic                       csr_access_fault,
-    input  logic [31:0]                fault_address,
+    input  wire [1:0]                 privilege_mode,
+    input  wire                       csr_access_fault,
+    input  wire [31:0]                fault_address,
     output logic                       selectPC,
     output logic                       tlb_flush,
 
-    input  logic                       IRQ_TO_CPU_CTRL1,  // SSIP
-    input  logic                       IRQ_TO_CPU_CTRL3,  // MSIP
-    input  logic                       IRQ_TO_CPU_CTRL5,  // STIP
-    input  logic                       IRQ_TO_CPU_CTRL7,  // MTIP
-    input  logic                       IRQ_TO_CPU_CTRL9,  // SEIP
-    input  logic                       IRQ_TO_CPU_CTRL11, // MEIP
+    input  wire                       IRQ_TO_CPU_CTRL1,  // SSIP
+    input  wire                       IRQ_TO_CPU_CTRL3,  // MSIP
+    input  wire                       IRQ_TO_CPU_CTRL5,  // STIP
+    input  wire                       IRQ_TO_CPU_CTRL7,  // MTIP
+    input  wire                       IRQ_TO_CPU_CTRL9,  // SEIP
+    input  wire                       IRQ_TO_CPU_CTRL11, // MEIP
 
     output logic                       is_instruction,
-    input  logic                       stall,
+    input  wire                       stall,
 
     output logic                       mem_valid,
-    input  logic                       mem_ready,
-    input  logic [31:0]                cpu_mem_addr,
+    input  wire                       mem_ready,
+    input  wire [31:0]                cpu_mem_addr,
 
     output logic                       mul_valid,
-    input  logic                       mul_ready,
+    input  wire                       mul_ready,
 
     output logic                       div_valid,
-    input  logic                       div_ready
+    input  wire                       div_ready
 );
 
   logic [`ALU_OP_WIDTH-1:0] ALUOp;

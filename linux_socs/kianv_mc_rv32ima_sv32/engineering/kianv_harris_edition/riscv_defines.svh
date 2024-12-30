@@ -185,8 +185,8 @@
 `define CSR_OP_LAST        7
 
 // Include Dependencies
-`include "csr_utilities.vh"
-`include "rv32_amo_opcodes.vh"
-`include "sv32.vh"
+`include "csr_utilities.svh"
+`include "rv32_amo_opcodes.svh"
+`include "sv32.svh"
 
 `endif  // RISCV_DEFINES_SVH

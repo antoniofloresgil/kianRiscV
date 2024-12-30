@@ -26,14 +26,14 @@
 `include "riscv_defines.svh"
 
 module divider (
-    input  logic                     clk,            // System clock
-    input  logic                     resetn,         // Active-low synchronous reset
+    input wire                     clk,            // System clock
+    input wire                     resetn,         // Active-low synchronous reset
 
-    input  logic [31:0]              divident,       // Dividend input
-    input  logic [31:0]              divisor,        // Divisor input
-    input  logic [`DIV_OP_WIDTH-1:0] DIVop,          // Division operation control
+    input wire [31:0]              divident,       // Dividend input
+    input wire [31:0]              divisor,        // Divisor input
+    input wire [`DIV_OP_WIDTH-1:0] DIVop,          // Division operation control
     output logic [31:0]              divOrRemRslt,   // Division or remainder result
-    input  logic                     valid,          // Input valid signal
+    input wire                     valid,          // Input valid signal
     output logic                     ready,          // Output ready signal
     output logic                     div_by_zero_err // Divide-by-zero error flag
 );

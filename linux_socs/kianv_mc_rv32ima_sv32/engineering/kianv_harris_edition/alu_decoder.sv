@@ -38,12 +38,12 @@
 `include "riscv_defines.svh"
 
 module alu_decoder (
-    input  logic                       imm_bit10,
-    input  logic                       op_bit5,
-    input  logic [2:0]                 funct3,
-    input  logic                       funct7b5,
-    input  logic [`ALU_OP_WIDTH-1:0]   ALUOp,
-    input  logic [`AMO_OP_WIDTH-1:0]   AMOop,
+    input wire                         imm_bit10,
+    input wire                         op_bit5,
+    input wire [2:0]                   funct3,
+    input wire                         funct7b5,
+    input wire [`ALU_OP_WIDTH-1:0]     ALUOp,
+    input wire [`AMO_OP_WIDTH-1:0]     AMOop,
     output logic [`ALU_CTRL_WIDTH-1:0] ALUControl
 );
 

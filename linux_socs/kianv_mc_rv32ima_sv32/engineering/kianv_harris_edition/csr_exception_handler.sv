@@ -24,21 +24,21 @@
 module csr_exception_handler #(
     parameter MTVEC_INIT = 32'h0000_0000
 ) (
-    input  logic                     clk,
-    input  logic                     resetn,
-    input  logic                     incr_inst_retired,
-    input  logic [11:0]             CSRAddr,
-    input  logic [`CSR_OP_WIDTH-1:0] CSRop,
-    input  logic                     we,
-    input  logic                     re,
-    input  logic [31:0]             Rd1,
-    input  logic [4:0]              uimm,
-    input  logic                     exception_event,
-    input  logic                     mret,
-    input  logic                     wfi_event,
-    input  logic [31:0]             cause,
-    input  logic [31:0]             pc,
-    input  logic [31:0]             badaddr,
+    input wire                     clk,
+    input wire                     resetn,
+    input wire                     incr_inst_retired,
+    input wire [11:0]             CSRAddr,
+    input wire [`CSR_OP_WIDTH-1:0] CSRop,
+    input wire                     we,
+    input wire                     re,
+    input wire [31:0]             Rd1,
+    input wire [4:0]              uimm,
+    input wire                     exception_event,
+    input wire                     mret,
+    input wire                     wfi_event,
+    input wire [31:0]             cause,
+    input wire [31:0]             pc,
+    input wire [31:0]             badaddr,
     output logic [31:0]             rdata,
     output logic [31:0]             exception_next_pc,
     output logic                     exception_select,
@@ -47,8 +47,8 @@ module csr_exception_handler #(
     output logic [31:0]             mstatus,
     output logic [31:0]             mie,
     output logic [31:0]             mip,
-    input  logic                     IRQ3,
-    input  logic                     IRQ7
+    input wire                     IRQ3,
+    input wire                     IRQ7
 );
 
     logic is_reg_operand;

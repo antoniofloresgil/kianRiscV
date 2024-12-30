@@ -30,20 +30,20 @@
 `include "riscv_defines.svh"
 
 module sv32_translate_data_to_physical (
-    input  logic        clk,
-    input  logic        resetn,
-    input  logic [31:0] address,           // Virtual address
+    input wire        clk,
+    input wire        resetn,
+    input wire [31:0] address,           // Virtual address
     output logic [33:0] physical_address,  // Physical address output
-    input  logic        is_write,          // Write operation flag
+    input wire        is_write,          // Write operation flag
     output logic        page_fault,        // Page fault signal
-    input  logic [1:0]  privilege_mode,    // Current privilege mode
-    input  logic [31:0] satp,              // SATP register
-    input  logic [31:0] mstatus,           // MSTATUS register
-    input  logic        valid,             // Translation valid signal
+    input wire [1:0]  privilege_mode,    // Current privilege mode
+    input wire [31:0] satp,              // SATP register
+    input wire [31:0] mstatus,           // MSTATUS register
+    input wire        valid,             // Translation valid signal
     output logic        ready,             // Translation ready signal
     output logic        walk_valid,        // Page table walk valid signal
-    input  logic        walk_ready,        // Page table walk ready signal
-    input  logic [31:0] pte_               // Page Table Entry input
+    input wire        walk_ready,        // Page table walk ready signal
+    input wire [31:0] pte_               // Page Table Entry input
 );
 
     // FSM States

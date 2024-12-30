@@ -40,9 +40,9 @@
 module mux2 #(
     parameter WIDTH = 32
 ) (
-    input  logic [WIDTH-1:0] d0,
-    input  logic [WIDTH-1:0] d1,
-    input  logic             s,
+    input wire [WIDTH-1:0]   d0,
+    input wire [WIDTH-1:0]   d1,
+    input wire               s,
     output logic [WIDTH-1:0] y
 );
 
@@ -58,10 +58,10 @@ endmodule
 module mux3 #(
     parameter WIDTH = 32
 ) (
-    input  logic [WIDTH-1:0] d0,
-    input  logic [WIDTH-1:0] d1,
-    input  logic [WIDTH-1:0] d2,
-    input  logic [1:0]       s,
+    input wire [WIDTH-1:0]   d0,
+    input wire [WIDTH-1:0]   d1,
+    input wire [WIDTH-1:0]   d2,
+    input wire [1:0]         s,
     output logic [WIDTH-1:0] y
 );
 
@@ -77,11 +77,11 @@ endmodule
 module mux4 #(
     parameter WIDTH = 32
 ) (
-    input  logic [WIDTH-1:0] d0,
-    input  logic [WIDTH-1:0] d1,
-    input  logic [WIDTH-1:0] d2,
-    input  logic [WIDTH-1:0] d3,
-    input  logic [1:0]       s,
+    input wire [WIDTH-1:0]   d0,
+    input wire [WIDTH-1:0]   d1,
+    input wire [WIDTH-1:0]   d2,
+    input wire [WIDTH-1:0]   d3,
+    input wire [1:0]         s,
     output logic [WIDTH-1:0] y
 );
 
@@ -116,12 +116,12 @@ endmodule
 module mux5 #(
     parameter WIDTH = 32
 ) (
-    input  logic [WIDTH-1:0] d0,
-    input  logic [WIDTH-1:0] d1,
-    input  logic [WIDTH-1:0] d2,
-    input  logic [WIDTH-1:0] d3,
-    input  logic [WIDTH-1:0] d4,
-    input  logic [2:0]       s,
+    input wire [WIDTH-1:0]   d0,
+    input wire [WIDTH-1:0]   d1,
+    input wire [WIDTH-1:0]   d2,
+    input wire [WIDTH-1:0]   d3,
+    input wire [WIDTH-1:0]   d4,
+    input wire [2:0]         s,
     output logic [WIDTH-1:0] y
 );
 
@@ -144,13 +144,13 @@ endmodule
 module mux6 #(
     parameter WIDTH = 32
 ) (
-    input  logic [WIDTH-1:0] d0,
-    input  logic [WIDTH-1:0] d1,
-    input  logic [WIDTH-1:0] d2,
-    input  logic [WIDTH-1:0] d3,
-    input  logic [WIDTH-1:0] d4,
-    input  logic [WIDTH-1:0] d5,
-    input  logic [2:0]       s,
+    input wire [WIDTH-1:0]   d0,
+    input wire [WIDTH-1:0]   d1,
+    input wire [WIDTH-1:0]   d2,
+    input wire [WIDTH-1:0]   d3,
+    input wire [WIDTH-1:0]   d4,
+    input wire [WIDTH-1:0]   d5,
+    input wire [2:0]         s,
     output logic [WIDTH-1:0] y
 );
 
@@ -174,8 +174,8 @@ endmodule
 module dlatch_kianV #(
     parameter WIDTH = 32
 ) (
-    input  logic             clk,
-    input  logic [WIDTH-1:0] d,
+    input wire               clk,
+    input wire [WIDTH-1:0]   d,
     output logic [WIDTH-1:0] q
 );
 
@@ -192,10 +192,10 @@ module dff_kianV #(
     parameter WIDTH  = 32,
     parameter PRESET = 0
 ) (
-    input  logic             resetn,
-    input  logic             clk,
-    input  logic             en,
-    input  logic [WIDTH-1:0] d,
+    input wire               resetn,
+    input wire               clk,
+    input wire               en,
+    input wire [WIDTH-1:0]   d,
     output logic [WIDTH-1:0] q
 );
 
@@ -214,9 +214,9 @@ endmodule
 module counter #(
     parameter WIDTH = 32
 ) (
-    input  logic             resetn,
-    input  logic             clk,
-    input  logic             inc,
+    input wire               resetn,
+    input wire               clk,
+    input wire               inc,
     output logic [WIDTH-1:0] q
 );
 

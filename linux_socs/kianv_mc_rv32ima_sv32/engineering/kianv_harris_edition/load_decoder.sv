@@ -31,10 +31,10 @@
 `include "riscv_defines.svh"
 
 module load_decoder (
-    input  logic [2:0]                   funct3,          // funct3 field from instruction
-    input  logic                         amo_data_load,   // Flag for atomic memory operations
+    input  wire  [2:0]                   funct3,          // funct3 field from instruction
+    input  wire                          amo_data_load,   // Flag for atomic memory operations
     output logic [`LOAD_OP_WIDTH-1:0]    LOADop,          // Load operation type
-    input  logic [1:0]                   addr_align_bits, // Address alignment bits
+    input  wire  [1:0]                   addr_align_bits, // Address alignment bits
     output logic                         is_load_unaligned // Flag for unaligned load
 );
 

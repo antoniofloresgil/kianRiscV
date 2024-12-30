@@ -26,18 +26,18 @@
 `include "riscv_defines.svh"
 
 module sv32_translate_instruction_to_physical (
-    input  logic        clk,
-    input  logic        resetn,
-    input  logic [31:0] address,            // Virtual instruction address
+    input wire          clk,
+    input wire          resetn,
+    input wire [31:0]   address,            // Virtual instruction address
     output logic [33:0] physical_address,   // Translated physical address
     output logic        page_fault,         // Page fault indication
-    input  logic [1:0]  privilege_mode,     // Privilege mode: machine/supervisor
-    input  logic [31:0] satp,               // SATP register for page table base
-    input  logic        valid,              // Translation request valid
+    input wire [1:0]    privilege_mode,     // Privilege mode: machine/supervisor
+    input wire [31:0]   satp,               // SATP register for page table base
+    input wire          valid,              // Translation request valid
     output logic        ready,              // Translation ready signal
     output logic        walk_valid,         // Page table walk start signal
-    input  logic        walk_ready,         // Page table walk ready signal
-    input  logic [31:0] pte                 // Page Table Entry result
+    input wire          walk_ready,         // Page table walk ready signal
+    input wire [31:0]   pte                 // Page Table Entry result
 );
 
     // FSM State Definitions

@@ -27,12 +27,12 @@
 `default_nettype none
 
 module register_file (
-    input  logic        clk,            // Clock signal
-    input  logic        we,             // Write enable
-    input  logic [4:0]  A1,             // Read address 1
-    input  logic [4:0]  A2,             // Read address 2
-    input  logic [4:0]  A3,             // Write address
-    input  logic [31:0] wd,             // Write data
+    input wire        clk,            // Clock signal
+    input wire        we,             // Write enable
+    input wire [4:0]  A1,             // Read address 1
+    input wire [4:0]  A2,             // Read address 2
+    input wire [4:0]  A3,             // Write address
+    input wire [31:0] wd,             // Write data
     output logic [31:0] rd1,            // Read data 1
     output logic [31:0] rd2             // Read data 2
 );

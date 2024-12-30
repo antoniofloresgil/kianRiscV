@@ -29,13 +29,13 @@
 `include "riscv_defines.svh"
 
 module multiplier (
-    input  logic                      clk,              // Clock signal
-    input  logic                      resetn,           // Active-low reset
-    input  logic [31:0]               factor1,          // Operand 1
-    input  logic [31:0]               factor2,          // Operand 2
-    input  logic [`MUL_OP_WIDTH-1:0]  MULop,            // Multiplier operation
+    input wire                      clk,              // Clock signal
+    input wire                      resetn,           // Active-low reset
+    input wire [31:0]               factor1,          // Operand 1
+    input wire [31:0]               factor2,          // Operand 2
+    input wire [`MUL_OP_WIDTH-1:0]  MULop,            // Multiplier operation
     output logic [31:0]               product,          // Result product
-    input  logic                      valid,            // Valid input signal
+    input wire                      valid,            // Valid input signal
     output logic                      ready             // Ready output signal
 );
 

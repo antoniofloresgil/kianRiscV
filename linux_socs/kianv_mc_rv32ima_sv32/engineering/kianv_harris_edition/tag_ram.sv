@@ -28,13 +28,13 @@ module tag_ram #(
     parameter int unsigned TAG_WIDTH          = 20,
     parameter int unsigned PAYLOAD_WIDTH      = 32
 )(
-    input  logic                          clk,
-    input  logic                          resetn,
-    input  logic [TAG_RAM_ADDR_WIDTH-1:0] idx,        // Address index
-    input  logic [TAG_WIDTH-1:0]          tag,        // Tag input
-    input  logic [PAYLOAD_WIDTH-1:0]      payload_i,  // Payload input
-    input  logic                          we,         // Write enable
-    input  logic                          valid_i,    // Validity input
+    input wire                            clk,
+    input wire                            resetn,
+    input wire [TAG_RAM_ADDR_WIDTH-1:0]   idx,        // Address index
+    input wire [TAG_WIDTH-1:0]            tag,        // Tag input
+    input wire [PAYLOAD_WIDTH-1:0]        payload_i,  // Payload input
+    input wire                            we,         // Write enable
+    input wire                            valid_i,    // Validity input
     output logic                          hit_o,      // Hit flag
     output logic [PAYLOAD_WIDTH-1:0]      payload_o   // Payload output
 );

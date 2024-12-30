@@ -36,9 +36,9 @@
 `include "riscv_defines.svh"
 
 module alu (
-    input  logic [31:0] a,
-    input  logic [31:0] b,
-    input  logic [`ALU_CTRL_WIDTH-1:0] alucontrol,
+    input wire [31:0] a,
+    input wire [31:0] b,
+    input wire [`ALU_CTRL_WIDTH-1:0] alucontrol,
     output logic [31:0] result,
     output logic zero
 );

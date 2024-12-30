@@ -26,9 +26,9 @@
 `include "riscv_defines.svh"
 
 module divider_decoder (
-    input  logic [2:0]                 funct3,        // 'funct3' field from instruction
+    input  wire [2:0]                  funct3,        // 'funct3' field from instruction
     output logic [`DIV_OP_WIDTH-1:0]   DIVop,         // Division operation output
-    input  logic                       mul_ext_valid, // Multiplier/Divider external validity flag
+    input  wire                        mul_ext_valid, // Multiplier/Divider external validity flag
     output logic                       div_valid      // Division valid flag
 );
 

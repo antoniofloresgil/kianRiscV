@@ -29,34 +29,34 @@ module sv32 #(
     parameter NUM_ENTRIES_ITLB = 64,
     parameter NUM_ENTRIES_DTLB = 64
 )(
-    input  logic        clk,
-    input  logic        resetn,
+    input wire        clk,
+    input wire        resetn,
 
     // CPU Interface
-    input  logic        cpu_valid,
+    input wire        cpu_valid,
     output logic        cpu_ready,
-    input  logic [ 3:0] cpu_wstrb,
-    input  logic [31:0] cpu_addr,
-    input  logic [31:0] cpu_wdata,
+    input wire [ 3:0] cpu_wstrb,
+    input wire [31:0] cpu_addr,
+    input wire [31:0] cpu_wdata,
     output logic [31:0] cpu_rdata,
 
     // Memory Interface
     output logic        mem_valid,
-    input  logic        mem_ready,
+    input wire        mem_ready,
     output logic [ 3:0] mem_wstrb,
     output logic [33:0] mem_addr,
     output logic [31:0] mem_wdata,
-    input  logic [31:0] mem_rdata,
+    input wire [31:0] mem_rdata,
 
     // MMU Control Signals
-    input  logic        is_instruction,
-    input  logic        tlb_flush,
+    input wire        is_instruction,
+    input wire        tlb_flush,
     output logic        stall,
 
     // Privilege and MMU Configuration
-    input  logic [31:0] satp,
-    input  logic [31:0] mstatus,
-    input  logic [ 1:0] privilege_mode,
+    input wire [31:0] satp,
+    input wire [31:0] mstatus,
+    input wire [ 1:0] privilege_mode,
 
     // Fault Handling
     output logic [31:0] fault_address,

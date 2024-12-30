@@ -26,8 +26,8 @@
 `include "riscv_defines.svh"
 
 module extend (
-    input  logic [31:7] instr,   // Input instruction (excluding opcode)
-    input  logic [2:0]  immsrc,  // Immediate source type (I, S, B, J, U)
+    input wire [31:7] instr,   // Input instruction (excluding opcode)
+    input wire [2:0]  immsrc,  // Immediate source type (I, S, B, J, U)
     output logic [31:0] immext   // Sign-extended immediate output
 );
 

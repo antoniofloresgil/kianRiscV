@@ -30,15 +30,15 @@
 `include "riscv_defines.svh"
 
 module main_fsm (
-        input  logic                        clk,
-        input  logic                        resetn,
-        input  logic [                 6:0] op,
-        input  logic [                 6:0] funct7,
-        input  logic [                 2:0] funct3,
-        input  logic [                 4:0] Rs1,
-        input  logic [                 4:0] Rs2,
-        input  logic [                 4:0] Rd,
-        input  logic                        Zero,
+        input  wire                         clk,
+        input  wire                         resetn,
+        input  wire [                  6:0] op,
+        input  wire [                  6:0] funct7,
+        input  wire [                  2:0] funct3,
+        input  wire [                  4:0] Rs1,
+        input  wire [                  4:0] Rs2,
+        input  wire [                  4:0] Rd,
+        input  wire                         Zero,
         output logic                        AdrSrc,
         output logic                        fetched_instr,
         output logic                        incr_inst_retired,
@@ -53,9 +53,9 @@ module main_fsm (
         output logic                        Branch,
         output logic                        RegWrite,
         output logic                        MemWrite,
-        input  logic                        unaligned_access_load,
-        input  logic                        unaligned_access_store,
-        input  logic                        access_fault,
+        input  wire                         unaligned_access_load,
+        input  wire                         unaligned_access_store,
+        input  wire                         access_fault,
         output logic                        ALUOutWrite,
         output logic                        mem_valid,
         output logic                        amo_temp_write_operation,
@@ -68,7 +68,7 @@ module main_fsm (
         output logic                        amo_buffered_address,
         output logic                        select_ALUResult,
         output logic                        select_amo_temp,
-        input  logic                        amo_reserved_state_load,
+        input  wire                         amo_reserved_state_load,
 
         // Exception Handler
         output logic                        exception_event,
@@ -76,16 +76,16 @@ module main_fsm (
         output logic [31:0]                 badaddr,
         output logic                        mret,
         output logic                        wfi_event,
-        input  logic [1:0]                  privilege_mode,
-        input  logic                        csr_access_fault,
-        input  logic [31:0]                 mie,
-        input  logic [31:0]                 mip,
-        input  logic [31:0]                 mstatus,
+        input  wire [1:0]                   privilege_mode,
+        input  wire                         csr_access_fault,
+        input  wire [31:0]                  mie,
+        input  wire [31:0]                  mip,
+        input  wire [31:0]                  mstatus,
 
         output logic                        mul_ext_valid,
-        input  logic                        mul_ext_ready,
+        input  wire                         mul_ext_ready,
 
-        input  logic                        mem_ready
+        input  wire                        mem_ready
     );
     // S0  --> Fetch
     // S1  --> Decode
@@ -185,7 +185,7 @@ module main_fsm (
     logic is_amomax_w = `RV32_IS_AMOMAX_W(funct5);
     logic is_amominu_w = `RV32_IS_AMOMINU_W(funct5);
     logic is_amomaxu_w = `RV32_IS_AMOMAXU_W(funct5);
-    logic is_fence = `RV32_IS_FENCE(op);
+    logic is_fence = `RV32_IS_FENCE(op,funct3);
     logic is_ebreak = `IS_EBREAK(op, funct3, funct7, Rs1, Rs2, Rd);
     logic is_ecall = `IS_ECALL(op, funct3, funct7, Rs1, Rs2, Rd);
     logic is_mret = `IS_MRET(op, funct3, funct7, Rs1, Rs2, Rd);
