@@ -16,7 +16,8 @@ Open your Ubuntu terminal in WSL2 and run:
 
 ```bash
 sudo apt update
-sudo apt install python3-pip python3-venv usbutils
+sudo apt install python3-pip python3-venv usbutils graphviz inkscape npm eog
+sudo npm install -g netlistsvg
 ```
 ### 1.2 Create and Activate a Virtual Environment (Recommended)
 
@@ -173,7 +174,14 @@ yosys -p "synth_ecp5 -top top -json hardware.json" -q blinky.v
 nextpnr-ecp5 --85k --package CABGA381 --json hardware.json --textcfg hardware.config --lpf ulx3s_v20.lpf -q --timing-allow-fail --force
 ecppack --compress --db /home/aflores/.apio/packages/tools-oss-cad-suite/share/trellis/database hardware.config hardware.bit
 ```
+You can generate a png image of the circuit from the verilog file using:
 
+```bash
+$ yosys -p "read_verilog blinky.v; synth -top top; abc -g AND,OR,XOR; write_json top.json" 
+$ netlistsvg top.json -o output.svg
+$ inkscape output.svg --export-background=white --export-background-opacity=1 --export-png=output.png
+$ eog output.png
+```
 
 Upload the Bitstream to Your FPGA:
 ```bash
