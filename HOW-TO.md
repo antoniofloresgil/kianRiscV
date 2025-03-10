@@ -9,7 +9,14 @@ Before you begin, ensure you have the following installed on your system:
 - [Apio](https://github.com/FPGAwars/apio)
 - [Yosys](http://www.clifford.at/yosys/)
 - [ULX3S-85F Board](https://github.com/emard/ulx3s)
-
+- Packages for RISC-V cross-compilation on Ubuntu:
+    ```sh
+    git clone https://github.com/riscv/riscv-gnu-toolchain
+    sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build
+    ./configure --prefix=/opt/riscv --with-arch=rv32gc --with-abi=ilp32d
+    make linux
+    ```
+    And then add /opt/riscv/bin to your PATH.
 ## Step 1: Create a New Project
 
 1. Create a new directory for your project:
