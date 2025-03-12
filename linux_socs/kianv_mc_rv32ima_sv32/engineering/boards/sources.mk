@@ -10,7 +10,8 @@ SRCS := ./pll.v \
         ../../gpio.v \
         ../../cache.v \
         ../../icache.v \
-        ../../plic.v \
+	../../plic.v \
+	../../pwm.v \
         ../../sdram/mt48lc16m16a2_ctrl.v \
         ../../sdram/w9864g6jt_ctrl.v \
         ../../sdram/m12l64322a_ctrl.v \

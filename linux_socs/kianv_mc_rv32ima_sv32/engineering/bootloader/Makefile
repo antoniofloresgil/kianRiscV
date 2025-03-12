@@ -20,7 +20,7 @@
 OBJS = start.S custom_stdlib.c kianv_io_utils.c bootloader.c sd.c spi.c timer.c
 
 # Define the toolchain prefix (adjust as needed)
-TOOLPREFIX = riscv32-buildroot-linux-gnu-
+TOOLPREFIX = riscv32-unknown-linux-gnu-
 
 # Find libgcc path automatically
 LIBGCC := $(shell $(TOOLPREFIX)gcc -print-libgcc-file-name)

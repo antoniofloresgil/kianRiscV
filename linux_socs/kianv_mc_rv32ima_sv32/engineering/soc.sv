@@ -64,7 +64,7 @@
 
 `default_nettype none
 `timescale 1 ns / 100 ps
-`include "defines_soc.vh"
+`include "defines_soc.svh"
 
 module soc #(
     parameter NUM_UARTS = 2

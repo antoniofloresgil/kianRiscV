@@ -34,199 +34,160 @@
 `default_nettype none
 /* verilator lint_off MULTITOP */
 
-//============================================================
-// 2-to-1 Multiplexer 
-//============================================================
+// 2-to-1 multiplexer module
 module mux2 #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire [WIDTH-1:0]   d0,
-    input wire [WIDTH-1:0]   d1,
-    input wire               s,
+    input  logic [WIDTH-1:0] d0,
+    input  logic [WIDTH-1:0] d1,
+    input  logic             sel,
     output logic [WIDTH-1:0] y
 );
-
-  always_comb begin
-    y = s ? d1 : d0;
-  end
-
+  // If s is high, select d1; otherwise, select d0.
+  assign y = sel ? d1 : d0;
 endmodule
 
-//============================================================
-// 3-to-1 Multiplexer 
-//============================================================
+// 3-to-1 multiplexer module
 module mux3 #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire [WIDTH-1:0]   d0,
-    input wire [WIDTH-1:0]   d1,
-    input wire [WIDTH-1:0]   d2,
-    input wire [1:0]         s,
+    input  logic [WIDTH-1:0] d0,
+    input  logic [WIDTH-1:0] d1,
+    input  logic [WIDTH-1:0] d2,
+    input  logic [1:0]       sel,
     output logic [WIDTH-1:0] y
 );
-
-  always_comb begin
-    y = s[1] ? d2 : (s[0] ? d1 : d0);
-  end
-
+  // Select d2 if s[1] is high; if not, select d1 when s[0] is high; otherwise, select d0.
+  assign y = sel[1] ? d2 : (sel[0] ? d1 : d0);
 endmodule
 
-//============================================================
-// 4-to-1 Multiplexer 
-//============================================================
+// 4-to-1 multiplexer module using three 2-to-1 muxes
 module mux4 #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire [WIDTH-1:0]   d0,
-    input wire [WIDTH-1:0]   d1,
-    input wire [WIDTH-1:0]   d2,
-    input wire [WIDTH-1:0]   d3,
-    input wire [1:0]         s,
+    input  logic [WIDTH-1:0] d0,
+    input  logic [WIDTH-1:0] d1,
+    input  logic [WIDTH-1:0] d2,
+    input  logic [WIDTH-1:0] d3,
+    input  logic [1:0]       sel,
     output logic [WIDTH-1:0] y
 );
 
+  // Intermediate signals for the lower and upper mux outputs.
   logic [WIDTH-1:0] low, high;
 
+  // Lower 2-to-1 multiplexer: selects between d0 and d1 based on s[0]
   mux2 #(.WIDTH(WIDTH)) lowmux (
-    .d0(d0),
-    .d1(d1),
-    .s(s[0]),
-    .y(low)
+      .d0(d0),
+      .d1(d1),
+      .sel (sel[0]),
+      .y (low)
   );
-
+  // Upper 2-to-1 multiplexer: selects between d2 and d3 based on s[0]
   mux2 #(.WIDTH(WIDTH)) highmux (
-    .d0(d2),
-    .d1(d3),
-    .s(s[0]),
-    .y(high)
+      .d0(d2),
+      .d1(d3),
+      .sel (sel[0]),
+      .y (high)
   );
-
+  // Final multiplexer: selects between low and high based on s[1]
   mux2 #(.WIDTH(WIDTH)) finalmux (
-    .d0(low),
-    .d1(high),
-    .s(s[1]),
-    .y(y)
+      .d0(low),
+      .d1(high),
+      .sel (sel[1]),
+      .y (y)
   );
-
 endmodule
 
-//============================================================
-// 5-to-1 Multiplexer 
-//============================================================
+// 5-to-1 multiplexer module
 module mux5 #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire [WIDTH-1:0]   d0,
-    input wire [WIDTH-1:0]   d1,
-    input wire [WIDTH-1:0]   d2,
-    input wire [WIDTH-1:0]   d3,
-    input wire [WIDTH-1:0]   d4,
-    input wire [2:0]         s,
+    input  logic [WIDTH-1:0] d0,
+    input  logic [WIDTH-1:0] d1,
+    input  logic [WIDTH-1:0] d2,
+    input  logic [WIDTH-1:0] d3,
+    input  logic [WIDTH-1:0] d4,
+    input  logic [2:0]       sel,
     output logic [WIDTH-1:0] y
 );
-
-  always_comb begin
-    case (s)
-      3'd0: y = d0;
-      3'd1: y = d1;
-      3'd2: y = d2;
-      3'd3: y = d3;
-      3'd4: y = d4;
-      default: y = d0;
-    endcase
-  end
-
+  // Select one of five inputs based on the 3-bit select signal s.
+  assign y = (sel == 3'd0) ? d0 :
+             (sel == 3'd1) ? d1 :
+             (sel == 3'd2) ? d2 :
+             (sel == 3'd3) ? d3 : d4;
 endmodule
 
-//============================================================
-// 6-to-1 Multiplexer 
-//============================================================
+// 6-to-1 multiplexer module
 module mux6 #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire [WIDTH-1:0]   d0,
-    input wire [WIDTH-1:0]   d1,
-    input wire [WIDTH-1:0]   d2,
-    input wire [WIDTH-1:0]   d3,
-    input wire [WIDTH-1:0]   d4,
-    input wire [WIDTH-1:0]   d5,
-    input wire [2:0]         s,
+    input  logic [WIDTH-1:0] d0,
+    input  logic [WIDTH-1:0] d1,
+    input  logic [WIDTH-1:0] d2,
+    input  logic [WIDTH-1:0] d3,
+    input  logic [WIDTH-1:0] d4,
+    input  logic [WIDTH-1:0] d5,
+    input  logic [2:0]       sel,
     output logic [WIDTH-1:0] y
 );
-
-  always_comb begin
-    case (s)
-      3'd0: y = d0;
-      3'd1: y = d1;
-      3'd2: y = d2;
-      3'd3: y = d3;
-      3'd4: y = d4;
-      3'd5: y = d5;
-      default: y = d0;
-    endcase
-  end
-
+  // Select one of six inputs based on the value of s.
+  assign y = (sel == 3'd0) ? d0 :
+             (sel == 3'd1) ? d1 :
+             (sel == 3'd2) ? d2 :
+             (sel == 3'd3) ? d3 :
+             (sel == 3'd4) ? d4 : d5;
 endmodule
 
-//============================================================
-// D Latch (Triggered on rising edge of clk) 
-//============================================================
+// D-latch module (clocked) for kianV
 module dlatch_kianV #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire               clk,
-    input wire [WIDTH-1:0]   d,
-    output logic [WIDTH-1:0] q
+    input  logic              clk,
+    input  logic [WIDTH-1:0]  d,
+    output logic [WIDTH-1:0]  q
 );
-
+  // This process updates q on the rising edge of clk.
   always_ff @(posedge clk) begin
-    q <= d;
+      q <= d;
   end
-
 endmodule
 
-//============================================================
-// D Flip-Flop with Enable and Reset 
-//============================================================
+// D flip-flop with synchronous reset and enable for kianV
 module dff_kianV #(
-    parameter WIDTH  = 32,
-    parameter PRESET = 0
+    parameter int WIDTH  = 32,
+    parameter int PRESET = 0
 ) (
-    input wire               resetn,
-    input wire               clk,
-    input wire               en,
-    input wire [WIDTH-1:0]   d,
+    input  logic             resetn,
+    input  logic             clk,
+    input  logic             en,
+    input  logic [WIDTH-1:0] d,
     output logic [WIDTH-1:0] q
 );
-
+  // On each rising edge, if reset is low, q is set to PRESET.
+  // Otherwise, if enable is high, q is updated with d.
   always_ff @(posedge clk) begin
     if (!resetn)
       q <= PRESET;
     else if (en)
       q <= d;
   end
-
 endmodule
 
-//============================================================
-// Counter 
-//============================================================
+// Counter module: increments when inc is asserted, with synchronous reset.
 module counter #(
-    parameter WIDTH = 32
+    parameter int WIDTH = 32
 ) (
-    input wire               resetn,
-    input wire               clk,
-    input wire               inc,
+    input  logic             resetn,
+    input  logic             clk,
+    input  logic             inc,
     output logic [WIDTH-1:0] q
 );
-
+  // On the rising edge of clk, reset q to 0 if resetn is low, otherwise increment q if inc is high.
   always_ff @(posedge clk) begin
     if (!resetn)
-      q <= '0;
+      q <= 0;
     else if (inc)
       q <= q + 1;
   end
-
 endmodule
-
-/* verilator lint_on MULTITOP */
