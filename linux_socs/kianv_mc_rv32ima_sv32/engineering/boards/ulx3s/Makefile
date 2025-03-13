@@ -64,5 +64,5 @@ ${PROJ}.bit: ${PROJ}_out.config
 # Clean up build artifacts
 .PHONY: clean
 clean:
-	$(RM) *.bit *.config *.json
+	$(RM) $(SRCS) *.bit *.config *.json
 
