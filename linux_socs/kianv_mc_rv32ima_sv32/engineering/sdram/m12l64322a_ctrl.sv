@@ -15,7 +15,7 @@
  *  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *  
- *  SDRAM controller Module - SystemVerilog Implementation
+ *  SDRAM m12l64322a controller Module - SystemVerilog Implementation
  *
  *  Description:
  *  This module implements an SDRAM controller for the m12l64322a memory device.
