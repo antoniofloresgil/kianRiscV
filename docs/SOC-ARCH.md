@@ -32,7 +32,7 @@ Below is a simplified block diagram of the SoC architecture:
 
 and the dependecies between modules:
 
-![SoC Dependecies](images/Dependecies.svg)
+![SoC Dependecies](images/Dependencies.svg)
 
 
 ## Functional Description
